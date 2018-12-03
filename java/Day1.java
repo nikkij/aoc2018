@@ -34,7 +34,7 @@ public class Day1 {
                 return n;
             }
         });
-        
+
         if(found != 0) {
             return found;
         } else {
