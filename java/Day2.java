@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ListIterator;
 
 public class Day2 {
 
@@ -23,9 +24,24 @@ public class Day2 {
         List<String> begin = day2.readFile();
         begin.stream().forEach(line -> day2.visit(line));
 
-        System.out.println("Final answer:");
+        System.out.println("Part 1 Answer:");
         int answer = day2.linesWithTwoOfAKind * day2.linesWithThreeOfAKind;
         System.out.println(answer);
+
+        System.out.println("Part 2 Answer:");
+        String same = "";
+        String answer2 = "";
+        for(String line1 : begin) {
+            for(String line2 : begin) {
+                same = day2.same(line1, line2);
+                if(same.length() == 25) {
+                    answer2 = same;
+                    break;
+                }
+            }
+            if(answer2 != "") break;
+        }
+        System.out.println(answer2);
     }
 
     public void visit(String line) {
@@ -34,19 +50,29 @@ public class Day2 {
         char lineArr[] = line.toCharArray();
         Arrays.sort(lineArr);
         for(char c : lineArr) {
-            System.out.println(c);
             String stringified = Character.toString(c);
             if(seen.get(stringified) == null) {
                 seen.put(stringified, 1);
             } else {
-                System.out.println("oooo more than one");
                 seen.put(stringified, seen.get(stringified) + 1);
             }
         }
-        System.out.println(seen);
 
         if(seen.containsValue(2)) { linesWithTwoOfAKind++; }
         if(seen.containsValue(3)) { linesWithThreeOfAKind++; }
+    }
+
+    /* Let's do it with charAt() this time, should be faster than toCharArray() above. */
+    public String same(String line1, String line2) {
+        String found = "";
+        for(int i=0; i < line1.length(); i++) {
+            char c = line1.charAt(i);
+            char cc = line2.charAt(i);
+            if(c == cc) {
+                found += c;
+            }
+        }
+        return found;
     }
 
     public static List<String> readFile() {
